@@ -14,17 +14,22 @@
 
   <style>
     :root {
-      --bg: #0f172a;
-      --bg-dark: #020617;
-      --panel: #111827;
-      --panel-soft: #1e293b;
+      --bg: #0b1120;
+      --bg-2: #0f172a;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-strong: rgba(2, 6, 23, 0.82);
+      --card: rgba(2, 6, 23, 0.68);
+      --card-hover: rgba(15, 23, 42, 0.95);
       --text: #e5e7eb;
       --muted: #94a3b8;
       --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
       --accent-green: #22c55e;
-      --border: #334155;
-      --white: #ffffff;
       --warning: #facc15;
+      --border: rgba(148, 163, 184, 0.24);
+      --white: #ffffff;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      --radius: 18px;
     }
 
     * {
@@ -38,9 +43,26 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.14), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(34, 197, 94, 0.08), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.10), transparent 35%),
+        linear-gradient(180deg, #020617 0%, #0b1120 42%, #0f172a 100%);
       color: var(--text);
       line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 85%);
     }
 
     a {
@@ -57,31 +79,27 @@
       margin: auto;
     }
 
-    header {
-      background: linear-gradient(135deg, #020617 0%, #0f172a 55%, #111827 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 70px 0 45px;
-    }
-
     nav {
-      background: rgba(2, 6, 23, 0.95);
+      background: rgba(2, 6, 23, 0.84);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(16px);
     }
 
     nav .container {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
+      padding: 13px 0;
       gap: 20px;
       flex-wrap: wrap;
     }
 
     nav strong {
       color: var(--white);
+      letter-spacing: 0.2px;
     }
 
     nav .links {
@@ -91,63 +109,93 @@
       font-size: 14px;
     }
 
+    header {
+      padding: 82px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+
     .hero {
       display: grid;
-      grid-template-columns: 1.45fr 0.75fr;
-      gap: 32px;
+      grid-template-columns: 1.42fr 0.78fr;
+      gap: 34px;
       align-items: center;
     }
 
     .badge {
-      display: inline-block;
-      padding: 7px 13px;
-      border: 1px solid var(--accent);
-      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      background: var(--accent-soft);
+      color: #7dd3fc;
       border-radius: 999px;
       font-size: 14px;
       margin-bottom: 18px;
       font-weight: bold;
     }
 
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-green);
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.9);
+    }
+
     h1 {
       margin: 0;
       color: var(--white);
-      font-size: 46px;
-      line-height: 1.1;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -1.2px;
     }
 
     .subtitle {
-      font-size: 22px;
+      font-size: clamp(19px, 2vw, 24px);
       color: var(--accent);
-      margin: 14px 0 18px;
+      margin: 16px 0 20px;
       font-weight: bold;
+      max-width: 880px;
     }
 
     .hero p {
       font-size: 17px;
       margin: 0 0 14px;
+      color: #dbeafe;
+      max-width: 800px;
     }
 
     .cta {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 25px;
+      margin-top: 26px;
     }
 
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 11px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       background: var(--accent);
       color: #020617;
       font-weight: bold;
+      border: 1px solid transparent;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
     }
 
     .btn.secondary {
-      background: transparent;
+      background: rgba(2, 6, 23, 0.35);
       color: var(--accent);
-      border: 1px solid var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.55);
     }
 
     .btn.green {
@@ -156,45 +204,50 @@
     }
 
     .side-card {
-      background: rgba(17, 24, 39, 0.9);
+      background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px;
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
 
     .side-card h2 {
       margin-top: 0;
       color: var(--white);
-      font-size: 22px;
+      font-size: 23px;
     }
 
     .side-card p {
-      margin: 8px 0;
+      margin: 9px 0;
       color: var(--muted);
       font-size: 15px;
     }
 
     main {
-      padding: 40px 0;
+      padding: 42px 0;
     }
 
     section {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 28px;
+      border-radius: var(--radius);
+      padding: 30px;
       margin-bottom: 24px;
+      box-shadow: 0 14px 48px rgba(0, 0, 0, 0.16);
+      backdrop-filter: blur(14px);
     }
 
     h2 {
       margin-top: 0;
       color: var(--accent);
-      font-size: 27px;
+      font-size: 28px;
+      letter-spacing: -0.3px;
     }
 
     h3 {
       color: var(--white);
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
 
     .muted {
@@ -208,10 +261,17 @@
     }
 
     .card {
-      background: var(--bg-dark);
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
+      border-radius: 14px;
+      padding: 19px;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      background: var(--card-hover);
+      border-color: rgba(56, 189, 248, 0.36);
     }
 
     .card h3 {
@@ -225,8 +285,21 @@
 
     .timeline-item {
       border-left: 3px solid var(--accent);
-      padding-left: 16px;
-      margin-bottom: 26px;
+      padding-left: 18px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: 2px;
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.75);
     }
 
     .timeline-item:last-child {
@@ -238,18 +311,19 @@
       font-weight: bold;
       font-size: 14px;
       text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
 
     .tag-list {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 13px;
+      margin-top: 14px;
     }
 
     .tag {
-      background: var(--panel-soft);
-      border: 1px solid var(--border);
+      background: rgba(30, 41, 59, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.24);
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 14px;
@@ -258,10 +332,10 @@
 
     .highlight {
       border-left: 4px solid var(--warning);
-      background: #0b1220;
-      padding: 16px;
-      border-radius: 10px;
-      margin-top: 14px;
+      background: rgba(2, 6, 23, 0.50);
+      padding: 17px;
+      border-radius: 12px;
+      margin-top: 16px;
     }
 
     .project-type {
@@ -269,13 +343,19 @@
       font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
-      margin-bottom: 6px;
+      margin-bottom: 7px;
+    }
+
+    .proof {
+      margin-top: 12px;
+      color: #bfdbfe;
+      font-size: 15px;
     }
 
     footer {
       text-align: center;
-      padding: 30px 20px;
-      background: var(--bg-dark);
+      padding: 32px 20px;
+      background: rgba(2, 6, 23, 0.82);
       border-top: 1px solid var(--border);
       color: var(--muted);
     }
@@ -285,16 +365,16 @@
         grid-template-columns: 1fr;
       }
 
-      h1 {
-        font-size: 34px;
-      }
-
-      .subtitle {
-        font-size: 18px;
-      }
-
       nav .container {
         align-items: flex-start;
+      }
+
+      nav .links {
+        gap: 10px;
+      }
+
+      section {
+        padding: 22px;
       }
     }
   </style>
@@ -322,6 +402,7 @@
       <div>
         <span class="badge">Recherche stage Data Engineer — 8 semaines minimum</span>
 
+```
     <h1>Belkacem Benmimoun</h1>
 
     <div class="subtitle">
@@ -341,6 +422,7 @@
     <div class="cta">
       <a class="btn green" href="mailto:belkacemlinkedin@gmail.com">Me contacter</a>
       <a class="btn secondary" href="https://github.com/belka34090" target="_blank">GitHub</a>
+      <a class="btn secondary" href="https://www.linkedin.com/in/belkacem-adsysdevops" target="_blank">LinkedIn</a>
       <a class="btn secondary" href="https://github.com/belka34090/strix-halo-rocm-gpu-memory" target="_blank">Projet ROCm</a>
     </div>
   </div>
@@ -353,13 +435,16 @@
     <p><strong>Mode :</strong> présentiel, hybride ou remote</p>
     <p><strong>Email :</strong> belkacemlinkedin@gmail.com</p>
     <p><strong>GitHub :</strong> github.com/belka34090</p>
+    <p><strong>LinkedIn :</strong> linkedin.com/in/belkacem-adsysdevops</p>
   </div>
 </div>
+```
 
   </header>
 
   <main class="container">
 
+```
 <section id="profil">
   <h2>Profil</h2>
 
@@ -385,7 +470,6 @@
   <h2>Compétences techniques</h2>
 
   <div class="grid">
-
     <div class="card">
       <h3>Langages & Data</h3>
       <ul>
@@ -458,7 +542,6 @@
         <li>Documentation technique</li>
       </ul>
     </div>
-
   </div>
 </section>
 
@@ -562,7 +645,6 @@
   <h2>Projets & preuves techniques</h2>
 
   <div class="grid">
-
     <div class="card">
       <div class="project-type">Projet professionnel réel</div>
       <h3>Plateforme DevOps sécurisée — DSI Mairie de Castelnau-le-Lez</h3>
@@ -574,6 +656,10 @@
       <p>
         Ce projet démontre ma capacité à passer d’un besoin métier à une architecture
         technique déployable, documentée et supervisée.
+      </p>
+      <p class="proof">
+        Preuves : rapport de stage, pipeline CI/CD GitLab, architecture préproduction/production,
+        supervision Prometheus/Grafana et mécanisme de rollback.
       </p>
       <div class="tag-list">
         <span class="tag">Azure</span>
@@ -655,7 +741,6 @@
         <span class="tag">Documentation</span>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -730,9 +815,10 @@
 
   <p>Email : <a href="mailto:belkacemlinkedin@gmail.com">belkacemlinkedin@gmail.com</a></p>
   <p>GitHub : <a href="https://github.com/belka34090" target="_blank">https://github.com/belka34090</a></p>
+  <p>LinkedIn : <a href="https://www.linkedin.com/in/belkacem-adsysdevops" target="_blank">www.linkedin.com/in/belkacem-adsysdevops</a></p>
   <p>Portfolio : <a href="https://belka34090.github.io" target="_blank">https://belka34090.github.io</a></p>
-  <p>LinkedIn : www.linkedin.com/in/belkacem-adsysdevops</p>
 </section>
+```
 
   </main>
 
